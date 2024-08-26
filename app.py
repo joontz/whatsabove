@@ -19,7 +19,7 @@ def get_flights():
         
         app.logger.debug(f"Received request for lat: {lat}, lon: {lon}")
         fr_api = FlightRadar24API()
-        bounds = fr_api.get_bounds_by_point(lat, lon, 10000)
+        bounds = fr_api.get_bounds_by_point(lat, lon, 8000)
         # app.logger.debug(f"Calculated bounds: {bounds}")
         
         flights = fr_api.get_flights(bounds=bounds)
