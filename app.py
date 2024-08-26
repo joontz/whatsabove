@@ -26,7 +26,6 @@ def get_flights():
         app.logger.debug(flights)
         app.logger.debug(f"Number of flights found: {len(flights)}")
         
-        # Process the flights data to extract relevant information
         flight_data = []
         for flight in flights:
             flight_data.append({
