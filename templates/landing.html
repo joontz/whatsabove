@@ -13,79 +13,63 @@
     <meta property="og:type" content="website" />
     <title>What's Above Me</title>
     <style>
-      html,
       body {
-        height: 100%;
+        font-family: 'Courier New', Courier, monospace;
+        background-color: #000000;
+        color: #f0f0e0;
+        line-height: 1.6;
         margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-      body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(to bottom, #51829b, #9bb0c1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .scroll-container {
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start; /* Changed from center to flex-start */
         padding: 20px;
-        box-sizing: border-box;
       }
-      #content {
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        z-index: 10;
-        max-height: 80vh;
-        width: 100%;
+      .container {
         max-width: 600px;
-        display: flex;
-        flex-direction: column;
+        margin: 0 auto;
+        background-color: #111111;
+        padding: 20px;
+        border: 2px solid #f0f0e0;
+        box-shadow: 5px 5px 0 #f0f0e0;
       }
       h1 {
-        color: #3c3d37;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        color: #f0f0e0;
+        border-bottom: 2px solid #f0f0e0;
+        padding-bottom: 10px;
       }
-      h2 {
-        color: #3c3d37;
+      #refreshButton {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #f0f0e0;
+        color: #000000;
+        border: none;
+        cursor: pointer;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 16px;
+        margin-bottom: 20px;
       }
-      p {
-        font-size: 18px;
-        color: #3c3d37;
+      #refreshButton:hover {
+        background-color: #d0d0c0;
       }
-      .error {
-        color: #b71c1c;
-        font-weight: bold;
+      #flightList {
+        border-top: 2px dashed #f0f0e0;
+        padding-top: 20px;
+      }
+      #flightList p {
+        margin-bottom: 10px;
       }
       a {
-        color: #4a6491;
+        color: #00FF00;
         text-decoration: none;
-        font-weight: bold;
       }
       a:hover {
         text-decoration: underline;
       }
-      #flightList {
-        overflow-y: auto;
-        max-height: calc(
-          80vh - 150px
-        ); /* Adjust based on your title and button height */
-        padding: 0 20px;
-      }
       .loader {
-        border: 5px solid #f3f3f3;
-        border-top: 5px solid #3498db;
+        border: 5px solid #f0f0e0;
+        border-top: 5px solid #000000;
         border-radius: 50%;
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
         animation: spin 1s linear infinite;
         margin: 20px auto;
       }
@@ -97,73 +81,25 @@
           transform: rotate(360deg);
         }
       }
-      #content {
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        z-index: 10;
-        max-height: 80vh;
-        width: 100%;
-        max-width: 600px;
-        display: flex;
-        flex-direction: column;
-      }
-
-      #flightList {
-        overflow-y: auto;
-        max-height: calc(
-          80vh - 150px
-        ); /* Adjust based on your title and button height */
-        padding: 0 20px;
-      }
-
-      #refreshButton {
-        background-color: #4a6491;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        align-self: center; /* Center the button within the flex container */
-      }
-
-      #refreshButton:hover {
-        background-color: #3c5279;
-      }
-
-      #refreshButton:active {
-        background-color: #2e4060;
-        transform: translateY(1px);
-      }
-
-      #refreshButton:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(74, 100, 145, 0.3);
+      .error {
+        color: #ff6666;
+        font-weight: bold;
       }
     </style>
   </head>
   <body>
-    <div class="scroll-container">
-      <div id="content">
-        <h1>What's Above Me?</h1>
-        <button id="refreshButton" onclick="getLocation()">Refresh Data</button>
-
-        <div id="flightList"></div>
-      </div>
+    <div class="container">
+      <h1>What's Above Me?</h1>
+      <button id="refreshButton" onclick="getLocation()">REFRESH DATA</button>
+      <div id="flightList"></div>
     </div>
 
     <script>
+      // The JavaScript remains the same as in the previous version
       const flightListElement = document.getElementById('flightList');
 
       function showLoading() {
-        flightListElement.innerHTML =
-          '<div class="loader"></div>';
+        flightListElement.innerHTML = '<div class="loader"></div>';
       }
 
       function getLocation() {
