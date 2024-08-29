@@ -153,10 +153,10 @@
         let errorMessage = '';
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage = 'User denied the request for Geolocation.';
+            errorMessage = 'Location permission denied. Please enable location services for this website in your browser settings and try again.';
             break;
           case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Location information is unavailable.';
+            errorMessage = 'Location permission denied. Please enable location services for this website in your browser settings and try again.';
             break;
           case error.TIMEOUT:
             errorMessage = 'The request to get user location timed out.';
