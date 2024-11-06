@@ -35,7 +35,7 @@
         border-bottom: 2px solid #f0f0e0;
         padding-bottom: 10px;
       }
-      #refreshButton {
+      button {
         display: block;
         width: 100%;
         padding: 10px;
@@ -47,8 +47,14 @@
         font-size: 16px;
         margin-bottom: 20px;
       }
-      #refreshButton:hover {
+      button:hover {
         background-color: #d0d0c0;
+      }
+      #permissionSection {
+        text-align: center;
+        padding: 20px;
+        border: 2px dashed #f0f0e0;
+        margin-bottom: 20px;
       }
       #flightList {
         border-top: 2px dashed #f0f0e0;
@@ -58,7 +64,7 @@
         margin-bottom: 10px;
       }
       a {
-        color: #00FF00;
+        color: #00ff00;
         text-decoration: none;
       }
       a:hover {
@@ -85,21 +91,77 @@
         color: #ff6666;
         font-weight: bold;
       }
+      #refreshButton {
+        display: none; /* Hidden by default until permission is granted */
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>What's Above Me?</h1>
+
+      <div id="permissionSection">
+        <p>
+          To see flights above your location, we need permission to access your
+          location data.
+        </p>
+        <button id="permissionButton" onclick="requestLocationPermission()">
+          GRANT LOCATION ACCESS
+        </button>
+      </div>
+
       <button id="refreshButton" onclick="getLocation()">REFRESH DATA</button>
       <div id="flightList"></div>
     </div>
 
     <script>
-      // The JavaScript remains the same as in the previous version
       const flightListElement = document.getElementById('flightList');
+      const permissionSection = document.getElementById('permissionSection');
+      const refreshButton = document.getElementById('refreshButton');
 
       function showLoading() {
         flightListElement.innerHTML = '<div class="loader"></div>';
+      }
+
+      function requestLocationPermission() {
+        if (navigator.geolocation) {
+          navigator.permissions
+            .query({ name: 'geolocation' })
+            .then(function (permissionStatus) {
+              permissionStatus.onchange = function () {
+                handlePermissionChange(permissionStatus);
+              };
+
+              // Request the permission
+              navigator.geolocation.getCurrentPosition(
+                function (position) {
+                  // Permission granted
+                  permissionSection.style.display = 'none';
+                  refreshButton.style.display = 'block';
+                  showPosition(position);
+                },
+                function (error) {
+                  showError(error);
+                }
+              );
+            });
+        } else {
+          flightListElement.innerHTML =
+            '<p class="error">Geolocation is not supported by this browser.</p>';
+        }
+      }
+
+      function handlePermissionChange(permissionStatus) {
+        if (permissionStatus.state === 'granted') {
+          permissionSection.style.display = 'none';
+          refreshButton.style.display = 'block';
+          getLocation();
+        } else {
+          permissionSection.style.display = 'block';
+          refreshButton.style.display = 'none';
+          flightListElement.innerHTML =
+            '<p class="error">Location access is required to show flights above you.</p>';
+        }
       }
 
       function getLocation() {
@@ -107,7 +169,7 @@
           navigator.geolocation.getCurrentPosition(showPosition, showError);
         } else {
           flightListElement.innerHTML =
-            '<p>Geolocation is not supported by this browser.</p>';
+            '<p class="error">Geolocation is not supported by this browser.</p>';
         }
       }
 
@@ -153,10 +215,11 @@
         let errorMessage = '';
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage = 'Location permission denied. Please enable location services for this website in your browser settings and try again.';
+            errorMessage =
+              'Location permission denied. Please enable location services for this website in your browser settings and try again.';
             break;
           case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Location permission denied. Please enable location services for this website in your browser settings and try again.';
+            errorMessage = 'Location information is unavailable.';
             break;
           case error.TIMEOUT:
             errorMessage = 'The request to get user location timed out.';
@@ -168,7 +231,14 @@
         flightListElement.innerHTML = `<p class="error">${errorMessage}</p>`;
       }
 
-      window.onload = getLocation;
+      // Check initial permission state on load
+      if (navigator.permissions && navigator.permissions.query) {
+        navigator.permissions
+          .query({ name: 'geolocation' })
+          .then(function (permissionStatus) {
+            handlePermissionChange(permissionStatus);
+          });
+      }
     </script>
   </body>
 </html>
